@@ -1,4 +1,4 @@
-﻿import { env } from "@/src/config/env";
+import { env } from "@/src/config/env";
 
 const BASE = env.apiUrl;
 
@@ -36,5 +36,16 @@ export const dashboardService = {
     const data = await res.json();
     if (!res.ok) throw new Error(data.message || "Failed to fetch quick stats");
     return data;
+  },
+
+  // Analytical Dashboard Metrics
+  getAnalyticsData: async () => {
+    const res = await fetch(`${BASE}/dashboard/analytics`, {
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.message || "Failed to fetch analytics metrics");
+    return data.data;
   },
 };

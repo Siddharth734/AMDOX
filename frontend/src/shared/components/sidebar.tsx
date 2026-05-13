@@ -33,7 +33,7 @@ export function Sidebar() {
 
   return (
     <aside
-      className="w-[178px] flex-shrink-0 flex flex-col transition-all duration-300"
+      className="w-[178px] h-full flex-shrink-0 flex flex-col transition-all duration-300"
       style={{
         background: "rgba(255, 255, 255, 0.82)",
         borderRadius: "16px",

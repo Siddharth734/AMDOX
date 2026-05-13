@@ -1,6 +1,8 @@
 "use client";
 import "../../erp-module.css";
+import { useState, useEffect } from "react";
 import { AppShell } from "@/src/shared/components/app-shell";
+import { financeService } from "@/src/services/financeService";
 import { AreaChart, Area, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 import {
   DollarSign, TrendingUp, ArrowUpRight, ArrowDownRight,
@@ -10,50 +12,62 @@ import {
 const TICK = { fontSize: 9, fill: "#9099b8", fontFamily: "-apple-system, sans-serif" };
 
 export default function FinanceDashboard() {
-  const kpis = [
-    { label: "Total Revenue",  value: "$2,450.8K", change: "+12.5%", up: true,  icon: <DollarSign size={13} className="text-[#1fa866]" />, bg: "#e0f8ed" },
-    { label: "Total Expenses", value: "$890.3K",    change: "-5.2%",  up: false, icon: <ArrowDownRight size={13} className="text-[#d04848]" />, bg: "#fff0f0" },
-    { label: "Net Profit",     value: "$1,560.5K",  change: "+18.3%", up: true,  icon: <TrendingUp size={13} className="text-[#5b7cf5]" />, bg: "#e8eeff" },
-    { label: "Cash Flow",      value: "$892.1K",    change: "+3.1%",  up: true,  icon: <CreditCard size={13} className="text-[#9b7cf5]" />, bg: "#f0eeff" },
-  ];
+  const [kpis, setKpis] = useState([
+    { label: "Total Revenue",  value: "$0.0K", change: "0%", up: true,  icon: <DollarSign size={13} className="text-[#1fa866]" />, bg: "#e0f8ed" },
+    { label: "Total Expenses", value: "$0.0K",    change: "0%",  up: false, icon: <ArrowDownRight size={13} className="text-[#d04848]" />, bg: "#fff0f0" },
+    { label: "Net Profit",     value: "$0.0K",  change: "0%", up: true,  icon: <TrendingUp size={13} className="text-[#5b7cf5]" />, bg: "#e8eeff" },
+    { label: "Cash Flow",      value: "$0.0K",    change: "0%",  up: true,  icon: <CreditCard size={13} className="text-[#9b7cf5]" />, bg: "#f0eeff" },
+  ]);
 
-  const revenueData = [
-    { name: "Jan", revenue: 150, expenses: 90 },
-    { name: "Feb", revenue: 210, expenses: 130 },
-    { name: "Mar", revenue: 160, expenses: 100 },
-    { name: "Apr", revenue: 260, expenses: 170 },
-    { name: "May", revenue: 290, expenses: 190 },
-    { name: "Jun", revenue: 360, expenses: 230 },
-    { name: "Jul", revenue: 310, expenses: 220 },
-    { name: "Aug", revenue: 420, expenses: 270 },
-    { name: "Sep", revenue: 380, expenses: 258 },
-    { name: "Oct", revenue: 470, expenses: 308 },
-    { name: "Nov", revenue: 430, expenses: 285 },
-    { name: "Dec", revenue: 520, expenses: 350 },
-  ];
+  const [revenueData, setRevenueData] = useState<any[]>([]);
+  const [cashFlowData, setCashFlowData] = useState<any[]>([]);
+  const [transactions, setTransactions] = useState<any[]>([]);
+  const [summary, setSummary] = useState([
+    { label: "Invoices Outstanding", value: "$0.0K", color: "#d08a2e" },
+    { label: "Accounts Payable",     value: "$0.0K", color: "#d04848" },
+    { label: "Bank Balance",         value: "$0.0K", color: "#1fa866" },
+  ]);
+  const [workingCapital, setWorkingCapital] = useState("$0");
 
-  const cashFlowData = [
-    { name: "Jan", inflow: 400, outflow: 240 },
-    { name: "Feb", inflow: 300, outflow: 139 },
-    { name: "Mar", inflow: 550, outflow: 380 },
-    { name: "Apr", inflow: 470, outflow: 290 },
-    { name: "May", inflow: 390, outflow: 210 },
-    { name: "Jun", inflow: 480, outflow: 310 },
-  ];
+  useEffect(() => {
+    let active = true;
+    const load = async () => {
+      try {
+        const res = await financeService.getDashboard();
+        if (!active || !res.success || !res.data) return;
 
-  const transactions = [
-    { id: "INV-2024001", desc: "Invoice #2024001",            type: "income",  amount: "$2,500",   date: "May 13", status: "completed" },
-    { id: "EXP-SW001",  desc: "Software License — Adobe CC",  type: "expense", amount: "-$450",    date: "May 12", status: "completed" },
-    { id: "INV-2024002", desc: "Invoice #2024002",            type: "income",  amount: "$3,200",   date: "May 11", status: "pending" },
-    { id: "PAY-0510",   desc: "Payroll Distribution",          type: "expense", amount: "-$12,000", date: "May 10", status: "completed" },
-    { id: "INV-2024003", desc: "Consulting Fee — Q2",         type: "income",  amount: "$8,750",   date: "May 09", status: "completed" },
-  ];
+        const { dashboard } = res.data;
+        
+        if (dashboard.kpis) {
+          setKpis([
+            { label: "Total Revenue",  value: dashboard.kpis.totalRevenue, change: dashboard.kpis.revenueChange, up: dashboard.kpis.revenueUp, icon: <DollarSign size={13} className="text-[#1fa866]" />, bg: "#e0f8ed" },
+            { label: "Total Expenses", value: dashboard.kpis.totalExpenses, change: dashboard.kpis.expensesChange, up: dashboard.kpis.expensesUp, icon: <ArrowDownRight size={13} className="text-[#d04848]" />, bg: "#fff0f0" },
+            { label: "Net Profit",     value: dashboard.kpis.netProfit, change: dashboard.kpis.profitChange, up: dashboard.kpis.profitUp, icon: <TrendingUp size={13} className="text-[#5b7cf5]" />, bg: "#e8eeff" },
+            { label: "Cash Flow",      value: dashboard.kpis.cashFlow, change: dashboard.kpis.cashFlowChange, up: dashboard.kpis.cashFlowUp, icon: <CreditCard size={13} className="text-[#9b7cf5]" />, bg: "#f0eeff" },
+          ]);
+        }
 
-  const summary = [
-    { label: "Invoices Outstanding", value: "$85,200", color: "#d08a2e" },
-    { label: "Accounts Payable",     value: "$12,400", color: "#d04848" },
-    { label: "Bank Balance",         value: "$245,800", color: "#1fa866" },
-  ];
+        if (dashboard.revenueData) setRevenueData(dashboard.revenueData);
+        if (dashboard.cashFlowData) setCashFlowData(dashboard.cashFlowData);
+        if (dashboard.transactions) setTransactions(dashboard.transactions);
+        
+        if (dashboard.summary) {
+          setSummary([
+            { label: "Invoices Outstanding", value: dashboard.summary.invoicesOutstanding, color: "#d08a2e" },
+            { label: "Accounts Payable",     value: dashboard.summary.accountsPayable, color: "#d04848" },
+            { label: "Bank Balance",         value: dashboard.summary.bankBalance, color: "#1fa866" },
+          ]);
+        }
+        if (dashboard.workingCapital) setWorkingCapital(dashboard.workingCapital);
+
+      } catch (err) {
+        console.error("Finance Dashboard retrieval failure:", err);
+      }
+    };
+
+    load();
+    return () => { active = false; };
+  }, []);
 
   return (
     <AppShell requiredModule="finance">
@@ -157,7 +171,7 @@ export default function FinanceDashboard() {
               ))}
               <div className="fin-working-cap">
                 <span className="fin-working-cap-label">Working Capital</span>
-                <span className="fin-working-cap-value">$233,400</span>
+                <span className="fin-working-cap-value">{workingCapital}</span>
               </div>
             </div>
 
