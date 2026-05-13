@@ -2,6 +2,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { AppShell } from "@/src/shared/components/app-shell";
 import { ResponsiveContainer, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip } from "recharts";
+import { dashboardService } from "@/src/services/dashboardService";
 
 /* ── Tooltip from charts.tsx ── */
 function ChartTooltip({ active, payload, label }: any) {
@@ -142,11 +143,51 @@ function HeatmapMap() {
 }
 
 export default function AnalyticalDashboardPage() {
+  const [metrics, setMetrics] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function loadData() {
+      try {
+        const res = await dashboardService.getAnalyticsData();
+        setMetrics(res);
+      } catch (err) {
+        console.error("Error loading analytics:", err);
+      } finally {
+        setLoading(false);
+      }
+    }
+    loadData();
+  }, []);
+
+  if (loading || !metrics) {
+    return (
+      <AppShell title="Dashboard">
+        <div className="h-full flex flex-col items-center justify-center">
+          <div className="w-8 h-8 border-[3px] border-brand-200 border-t-brand-500 rounded-full animate-spin mb-3" />
+          <span className="text-xs font-medium text-slate-500 tracking-wide">Initialising AI Telemetry Engine...</span>
+        </div>
+      </AppShell>
+    );
+  }
+
+  const { kpis, sla, demandData, prodData, insights } = metrics;
+
+  const kpiIcons = [
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#5b7cf5" strokeWidth="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/></svg>,
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#38b2e0" strokeWidth="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>,
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#9b7cf5" strokeWidth="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>,
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#5b7cf5" strokeWidth="2"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/></svg>,
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#38b2e0" strokeWidth="2"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+  ];
+
+  const kpiBgColors = ["#e8eeff", "#e2f4ff", "#f0eeff", "#e8eeff", "#e2f4ff"];
+
   return (
     <AppShell title="Dashboard">
       <style dangerouslySetInnerHTML={{ __html: `
         * { box-sizing:border-box; margin:0; padding:0; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif }
-        .anal-wrap { display:flex; flex-direction:column; gap:8px; min-width:0; height:calc(100vh - 36px); overflow:hidden; padding-right:4px }
+        .anal-wrap { display:flex; flex-direction:column; gap:8px; min-width:0; height:100%; overflow:hidden; padding-right:4px }
         .topbar { display:flex; align-items:center; justify-content:space-between; margin-bottom: 2px; }
         .pg-title { font-size:22px; font-weight:700; color:#2a2f50; letter-spacing:-0.3px }
         .tb-icons { display:flex; gap:6px }
@@ -206,62 +247,38 @@ export default function AnalyticalDashboardPage() {
               <div className="filter-btn">All users <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#5a6080" strokeWidth="2"><polyline points="6 9 12 15 18 9"/></svg></div>
             </div>
             <div className="kpi-row">
-              <div className="kpi-card">
-                <div className="kpi-icon-wrap" style={{ background:"#e8eeff" }}><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#5b7cf5" strokeWidth="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/></svg></div>
-                <div className="kpi-label">Total Revenue</div>
-                <div className="kpi-value">$2900.8K</div>
-                <div className="kpi-change">▲ 6.93%</div>
-                <MiniSpark dataIndex={0} />
-              </div>
-              <div className="kpi-card">
-                <div className="kpi-icon-wrap" style={{ background:"#e2f4ff" }}><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#38b2e0" strokeWidth="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg></div>
-                <div className="kpi-label">Active Users</div>
-                <div className="kpi-value">356</div>
-                <div className="kpi-change">▲ 0.85%</div>
-                <MiniSpark dataIndex={1} />
-              </div>
-              <div className="kpi-card">
-                <div className="kpi-icon-wrap" style={{ background:"#f0eeff" }}><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#9b7cf5" strokeWidth="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></div>
-                <div className="kpi-label">Open Leads</div>
-                <div className="kpi-value">1,603</div>
-                <div className="kpi-change">▲ 2.29%</div>
-                <MiniSpark dataIndex={2} />
-              </div>
-              <div className="kpi-card">
-                <div className="kpi-icon-wrap" style={{ background:"#e8eeff" }}><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#5b7cf5" strokeWidth="2"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/></svg></div>
-                <div className="kpi-label">Inventory Value</div>
-                <div className="kpi-value">$7,227.94</div>
-                <div className="kpi-change">▲ 1.55%</div>
-                <MiniSpark dataIndex={3} />
-              </div>
-              <div className="kpi-card">
-                <div className="kpi-icon-wrap" style={{ background:"#e2f4ff" }}><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#38b2e0" strokeWidth="2"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg></div>
-                <div className="kpi-label">Task Completion</div>
-                <div className="kpi-value">89.87%</div>
-                <div className="kpi-change">▲ 1.83%</div>
-                <MiniSpark dataIndex={4} />
-              </div>
+              {kpis.map((kpi: any, i: number) => (
+                <div key={i} className="kpi-card">
+                  <div className="kpi-icon-wrap" style={{ background: kpiBgColors[i % kpiBgColors.length] }}>
+                    {kpiIcons[i % kpiIcons.length]}
+                  </div>
+                  <div className="kpi-label">{kpi.label}</div>
+                  <div className="kpi-value">{kpi.value}</div>
+                  <div className="kpi-change">{kpi.change}</div>
+                  <MiniSpark dataIndex={kpi.dataIndex || 0} />
+                </div>
+              ))}
             </div>
           </div>
 
           <div className="card" style={{ padding:"11px 12px", height:"100%" }}>
             <div className="card-title" style={{ marginBottom:"8px" }}>SLA Metrics</div>
             <div className="sla-pair">
-              <SLARing value="99.9%" label="Uptime" color="#5b7cf5" dash="198 3" />
-              <SLARing value="15ms" label="Response Time" color="#6ec6e8" dash="170 31" />
+              <SLARing value={sla.uptime} label="Uptime" color="#5b7cf5" dash={sla.uptimeDash} />
+              <SLARing value={sla.responseTime} label="Response Time" color="#6ec6e8" dash={sla.rtDash} />
             </div>
             <div style={{ padding:"0 4px" }}>
               <div className="sla-item" style={{ flexDirection:"row", justifyContent:"flex-start", gap:"8px", marginBottom:"6px" }}>
-                <svg width="56" height="56" viewBox="0 0 56 56" role="img" aria-label="97.5% resolution rate ring">
+                <svg width="56" height="56" viewBox="0 0 56 56" role="img" aria-label="resolution rate ring">
                   <circle cx="28" cy="28" r="22" fill="none" stroke="rgba(200,210,235,0.5)" strokeWidth="6"/>
                   <circle cx="28" cy="28" r="22" fill="none" stroke="#9b7cf5" strokeWidth="6"
-                    strokeDasharray="134 4" strokeLinecap="round"
+                    strokeDasharray={sla.rrDash} strokeLinecap="round"
                     transform="rotate(-90 28 28)" style={{ filter:"drop-shadow(0 0 3px rgba(155,124,245,0.5))" }}/>
-                  <text x="28" y="32" textAnchor="middle" fontSize="10" fontWeight="700" fill="#2a2f50">97.5%</text>
+                  <text x="28" y="32" textAnchor="middle" fontSize="10" fontWeight="700" fill="#2a2f50">{sla.resolutionRate}</text>
                 </svg>
                 <div style={{ flex:1 }}>
                   <div style={{ fontSize:"11px", fontWeight:600, color:"#5a6080", marginBottom:"5px" }}>Resolution Rate</div>
-                  <div className="res-bar"><div className="res-fill" style={{ width:"97.5%" }}></div></div>
+                  <div className="res-bar"><div className="res-fill" style={{ width: `${sla.rrPercent}%` }}></div></div>
                 </div>
               </div>
             </div>
@@ -281,7 +298,7 @@ export default function AnalyticalDashboardPage() {
               </div>
               <div style={{ position:"relative", flex:1, minHeight:"140px", marginLeft:"-20px", marginTop:"-5px" }}>
                 <ResponsiveContainer width="100%" height="100%">
-                  <AreaChart data={DEMAND_DATA} margin={{ top:5, right:5, left:0, bottom:0 }}>
+                  <AreaChart data={demandData} margin={{ top:5, right:5, left:0, bottom:0 }}>
                     <defs>
                       <linearGradient id="histGrad" x1="0" y1="0" x2="0" y2="1">
                         <stop offset="5%" stopColor="#6ec6e8" stopOpacity={0.15}/>
@@ -311,7 +328,7 @@ export default function AnalyticalDashboardPage() {
               </div>
               <div style={{ position:"relative", flex:1, minHeight:"125px", marginLeft:"-20px", marginBottom:"-10px", marginTop:"-5px" }}>
                 <ResponsiveContainer width="100%" height="100%">
-                  <AreaChart data={PROD_DATA} margin={{ top:5, right:5, left:0, bottom:0 }}>
+                  <AreaChart data={prodData} margin={{ top:5, right:5, left:0, bottom:0 }}>
                     <CartesianGrid vertical={false} strokeDasharray="3 3" stroke="rgba(200,210,235,0.25)" />
                     <XAxis dataKey="m" tick={TICK} axisLine={false} tickLine={false} />
                     <YAxis hide />
@@ -339,30 +356,16 @@ export default function AnalyticalDashboardPage() {
                 <div className="card-title">AI Insights</div>
                 <div className="card-menu">···</div>
               </div>
-              <div className="insight-item">
-                <div style={{ display:"flex", alignItems:"flex-start", justifyContent:"space-between", gap:"6px" }}>
-                  <div className="ins-title">Supply Chain Alert</div>
-                  <div style={{ width:"8px", height:"8px", borderRadius:"50%", background:"#5b7cf5", flexShrink:0, marginTop:"2px" }} />
+              {insights.map((insight: any, idx: number) => (
+                <div key={idx} className="insight-item" style={{ marginBottom: idx === insights.length - 1 ? 0 : undefined }}>
+                  <div style={{ display:"flex", alignItems:"flex-start", justifyContent:"space-between", gap:"6px" }}>
+                    <div className="ins-title">{insight.title}</div>
+                    <div style={{ width:"8px", height:"8px", borderRadius:"50%", background: insight.color || "#5b7cf5", flexShrink:0, marginTop:"2px" }} />
+                  </div>
+                  <div className="ins-body">{insight.body}</div>
+                  <div className="ins-priority"><span className="ins-dot" style={{ background: insight.color || "#9b7cf5" }} />Priority: {insight.priority}</div>
                 </div>
-                <div className="ins-body">High probability of port congestion next week, recommending alternative route.</div>
-                <div className="ins-priority"><span className="ins-dot" style={{ background:"#9b7cf5" }} />Priority: High</div>
-              </div>
-              <div className="insight-item">
-                <div style={{ display:"flex", alignItems:"flex-start", justifyContent:"space-between", gap:"6px" }}>
-                  <div className="ins-title">Production Efficiency</div>
-                  <div style={{ width:"8px", height:"8px", borderRadius:"50%", background:"#6ec6e8", flexShrink:0, marginTop:"2px" }} />
-                </div>
-                <div className="ins-body">AI identifies 12% potential cost reduction by re-scheduling specific HR resources.</div>
-                <div className="ins-priority"><span className="ins-dot" style={{ background:"#6ec6e8" }} />Priority: Level</div>
-              </div>
-              <div className="insight-item" style={{ marginBottom:0 }}>
-                <div style={{ display:"flex", alignItems:"flex-start", justifyContent:"space-between", gap:"6px" }}>
-                  <div className="ins-title">Market Trend Insight</div>
-                  <div style={{ width:"8px", height:"8px", borderRadius:"50%", background:"#c8b8f0", flexShrink:0, marginTop:"2px" }} />
-                </div>
-                <div className="ins-body">Predicted 18% spike in product Y demand due to sentiment analysis, suggest increasing inventory.</div>
-                <div className="ins-priority"><span className="ins-dot" style={{ background:"#c8b8f0" }} />Priority: Medium</div>
-              </div>
+              ))}
             </div>
           </div>
         </div>
