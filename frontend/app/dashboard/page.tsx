@@ -5,17 +5,20 @@ import { AppShell } from "@/src/shared/components/app-shell";
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar } from "recharts";
 import { Users, Briefcase, RefreshCw, ShoppingCart, Search, Maximize2, LineChart as LineChartIcon, ChevronDown, ArrowUpRight, Package, FolderKanban } from "lucide-react";
 
+import { useState, useEffect } from "react";
+import { dashboardService } from "@/src/services/dashboardService";
+
 export default function DashboardPage() {
-  // KPI data
-  const kpis = [
+  // KPI data slots with initial mock fallbacks
+  const [kpis, setKpis] = useState([
     { label: "Total Revenue", value: "$2900.8K", change: "+6.93%", icon: <Briefcase size={13} className="text-[#5b7cf5]" />, bg: "#e8eaff" },
     { label: "Active Users", value: "356", change: "+0.85%", icon: <Users size={13} className="text-[#38b4e0]" />, bg: "#e0f4ff" },
     { label: "Open Leads", value: "1,603", change: "+2.29%", icon: <LineChartIcon size={13} className="text-[#9b7cf5]" />, bg: "#f0ecff" },
     { label: "Inventory Value", value: "$7,227.94", change: "+1.55%", icon: <Briefcase size={13} className="text-[#5b7cf5]" />, bg: "#e8eaff" },
     { label: "Task Completion", value: "89.87%", change: "+1.83%", icon: <RefreshCw size={13} className="text-[#38b4e0]" />, bg: "#e0f4ff" },
-  ];
+  ]);
 
-  const revenueData = [
+  const [revenueData, setRevenueData] = useState([
     { name: "Jan", revenue: 150, expenses: 90 },
     { name: "Feb", revenue: 210, expenses: 130 },
     { name: "Mar", revenue: 160, expenses: 100 },
@@ -28,29 +31,69 @@ export default function DashboardPage() {
     { name: "Oct", revenue: 470, expenses: 308 },
     { name: "Nov", revenue: 430, expenses: 285 },
     { name: "Dec", revenue: 520, expenses: 350 },
-  ];
+  ]);
 
-  const performanceData = [
+  const [performanceData, setPerformanceData] = useState([
     { name: "Jan", valA: 400, valB: 240 },
     { name: "Feb", valA: 300, valB: 139 },
     { name: "Mar", valA: 550, valB: 380 },
     { name: "Apr", valA: 470, valB: 290 },
     { name: "May", valA: 390, valB: 210 },
     { name: "Jun", valA: 480, valB: 310 },
-  ];
+  ]);
+
+  const [activities, setActivities] = useState([
+    { title: "System Update Successful",  time: "1 hour ago",  dotBg: "#e8f4ff", dotIcon: <RefreshCw size={11} className="text-[#5b7cf5]" />,   avatar: "SU", avatarBg: "#b0bce8" },
+    { title: "New Order from ABC Corp.",  time: "2 hours ago", dotBg: "#eeeaff", dotIcon: <ShoppingCart size={11} className="text-[#9b7cf5]" />, avatar: "AB", avatarBg: "#c8b8f0" },
+    { title: "HR Payroll processed",      time: "3 hours ago", dotBg: "#e8eaff", dotIcon: <RefreshCw size={11} className="text-[#5b7cf5]" />,   avatar: "HR", avatarBg: "#b0c8e0" },
+    { title: "Invoice #1234 created",     time: "4 hours ago", dotBg: "#eeeaff", dotIcon: <ShoppingCart size={11} className="text-[#9b7cf5]" />, avatar: "IN", avatarBg: "#e8b8d0" },
+  ]);
+
+  // Lifecycle binding to trigger real-data fetching
+  useEffect(() => {
+    const loadDashboardData = async () => {
+      try {
+        // 1. Fetch Live Overview Metrics
+        const statsRes = await dashboardService.getOverallStats();
+        if (statsRes?.success && statsRes?.data) {
+          const fetchedStats = statsRes.data;
+          setKpis(prev => {
+            const updated = [...prev];
+            if (fetchedStats.totalRevenue !== undefined) updated[0].value = `$${fetchedStats.totalRevenue}`;
+            if (fetchedStats.revenueGrowth !== undefined) updated[0].change = fetchedStats.revenueGrowth;
+            if (fetchedStats.activeUsers !== undefined) updated[1].value = String(fetchedStats.activeUsers);
+            if (fetchedStats.userGrowth !== undefined) updated[1].change = fetchedStats.userGrowth;
+            return updated;
+          });
+        }
+
+        // 2. Fetch Live Recent Activities
+        const activityRes = await dashboardService.getRecentActivities(5);
+        if (activityRes?.success && Array.isArray(activityRes?.data)) {
+          // Map server activities format to UI schema
+          const mappedActivities = activityRes.data.map((a: any) => ({
+            title: a.action || a.title,
+            time: a.time || "Just now",
+            dotBg: "#e8f4ff",
+            dotIcon: <RefreshCw size={11} className="text-[#5b7cf5]" />,
+            avatar: a.user ? a.user.substring(0, 2).toUpperCase() : "SYS",
+            avatarBg: "#b0bce8"
+          }));
+          setActivities(mappedActivities);
+        }
+      } catch (err) {
+        console.error("Failed to load real-time dashboard metrics:", err);
+      }
+    };
+
+    loadDashboardData();
+  }, []);
 
   const quickAccess = [
     { label: "HR",        href: "/hr/dashboard",        bg: "#eef1ff", iconBg: "#b8c8f5", icon: <Users size={16} />,       color: "#4460d0" },
     { label: "Finance",   href: "/finance/dashboard",   bg: "#e8f8ff", iconBg: "#38b4e0", icon: <RefreshCw size={16} />,   color: "#1890c0" },
     { label: "Inventory", href: "/inventory/dashboard", bg: "#f0ecff", iconBg: "#9b7cf5", icon: <Package size={16} />,     color: "#7a4fd0" },
     { label: "Projects",  href: "/projects/dashboard",  bg: "#fff3f0", iconBg: "#f5a04a", icon: <FolderKanban size={16} />, color: "#c0550a" },
-  ];
-
-  const activities = [
-    { title: "System Update Successful",  time: "1 hour ago",  dotBg: "#e8f4ff", dotIcon: <RefreshCw size={11} className="text-[#5b7cf5]" />,   avatar: "SU", avatarBg: "#b0bce8" },
-    { title: "New Order from ABC Corp.",  time: "2 hours ago", dotBg: "#eeeaff", dotIcon: <ShoppingCart size={11} className="text-[#9b7cf5]" />, avatar: "AB", avatarBg: "#c8b8f0" },
-    { title: "HR Payroll processed",      time: "3 hours ago", dotBg: "#e8eaff", dotIcon: <RefreshCw size={11} className="text-[#5b7cf5]" />,   avatar: "HR", avatarBg: "#b0c8e0" },
-    { title: "Invoice #1234 created",     time: "4 hours ago", dotBg: "#eeeaff", dotIcon: <ShoppingCart size={11} className="text-[#9b7cf5]" />, avatar: "IN", avatarBg: "#e8b8d0" },
   ];
 
   return (
@@ -167,16 +210,20 @@ export default function DashboardPage() {
               </div>
               <div className="act-filter">All Activity</div>
               <div className="act-list custom-scrollbar">
-                {activities.map((act, i) => (
-                  <div key={i} className="act-item">
-                    <div className="act-dot" style={{ background: act.dotBg }}>{act.dotIcon}</div>
-                    <div className="act-info">
-                      <div className="act-ttl">{act.title}</div>
-                      <div className="act-time">{act.time}</div>
+                {activities.length > 0 ? (
+                  activities.map((act, i) => (
+                    <div key={i} className="act-item">
+                      <div className="act-dot" style={{ background: act.dotBg }}>{act.dotIcon}</div>
+                      <div className="act-info">
+                        <div className="act-ttl">{act.title}</div>
+                        <div className="act-time">{act.time}</div>
+                      </div>
+                      <div className="act-av" style={{ background: act.avatarBg }}>{act.avatar}</div>
                     </div>
-                    <div className="act-av" style={{ background: act.avatarBg }}>{act.avatar}</div>
-                  </div>
-                ))}
+                  ))
+                ) : (
+                  <p style={{ fontSize: "12px", color: "#9099b8", padding: "10px" }}>No recent activities</p>
+                )}
               </div>
             </div>
           </div>

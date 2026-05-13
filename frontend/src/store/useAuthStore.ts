@@ -34,11 +34,6 @@ export const useAuthStore = create<AuthStore>()(
           const res = await authService.login(email, password);
           const { accessToken, user } = res.data;
 
-          // Store token in localStorage for API client
-          if (typeof window !== "undefined") {
-            localStorage.setItem("amdox-access-token", accessToken);
-          }
-
           set({
             user: {
               id: user.id,
@@ -100,9 +95,6 @@ export const useAuthStore = create<AuthStore>()(
         } catch {
           // ignore logout errors
         }
-        if (typeof window !== "undefined") {
-          localStorage.removeItem("amdox-access-token");
-        }
         set({ user: null, accessToken: null, pendingEmail: null, isAuthenticated: false });
       },
 
@@ -112,9 +104,9 @@ export const useAuthStore = create<AuthStore>()(
       name: "amdox-auth",
       partialize: (s) => ({
         user: s.user,
-        accessToken: s.accessToken,
         pendingEmail: s.pendingEmail,
         isAuthenticated: s.isAuthenticated,
+        // accessToken intentionally excluded to prevent persistence to LocalStorage (XSS protection)
       }),
     }
   )

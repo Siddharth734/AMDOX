@@ -1,5 +1,6 @@
 import { env } from "@/src/config/env";
 import type { ApiResponse, QueryParams } from "@/src/types";
+import { useAuthStore } from "@/src/store/useAuthStore";
 
 class ApiClient {
   private baseUrl: string;
@@ -13,12 +14,10 @@ class ApiClient {
       "Content-Type": "application/json",
     };
 
-    // Inject access token from memory if available
-    if (typeof window !== "undefined") {
-      const stored = localStorage.getItem("amdox-access-token");
-      if (stored) {
-        headers["Authorization"] = `Bearer ${stored}`;
-      }
+    // Inject access token from secure Zustand in-memory state
+    const state = useAuthStore.getState();
+    if (state.accessToken) {
+      headers["Authorization"] = `Bearer ${state.accessToken}`;
     }
 
     return headers;
@@ -98,7 +97,8 @@ class ApiClient {
       if (!res.ok) return false;
       const data = await res.json();
       if (data.data?.accessToken) {
-        localStorage.setItem("amdox-access-token", data.data.accessToken);
+        // Update the in-memory state immediately
+        useAuthStore.setState({ accessToken: data.data.accessToken });
         return true;
       }
       return false;
