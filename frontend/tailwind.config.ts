@@ -1,0 +1,97 @@
+import type { Config } from "tailwindcss";
+
+const config: Config = {
+  darkMode: "class",
+  content: [
+    "./app/**/*.{ts,tsx}",
+    "./src/**/*.{ts,tsx}",
+  ],
+  theme: {
+    extend: {
+      fontFamily: {
+        sans:    ["var(--font-body)", "system-ui", "sans-serif"],
+        display: ["var(--font-display)", "system-ui"],
+        mono:    ["var(--font-mono)", "monospace"],
+      },
+      colors: {
+        brand: {
+          50:  "#eef3ff",
+          100: "#dce8ff",
+          200: "#c0d4ff",
+          300: "#93b4fc",
+          400: "#6090f8",
+          500: "#3b6ef0",
+          600: "#2853e0",
+          700: "#2040cc",
+          800: "#2038a5",
+          900: "#1e3482",
+        },
+        surface: {
+          0: "#f4f6fb",
+          1: "#ffffff",
+          2: "#f8f9fc",
+          3: "#f0f2f8",
+        },
+        ink: {
+          0: "#0f1728",
+          1: "#1e293b",
+          2: "#475569",
+          3: "#94a3b8",
+          4: "#cbd5e1",
+        },
+        accent: {
+          blue:   "#3b6ef0",
+          violet: "#8b5cf6",
+          indigo: "#6366f1",
+          emerald:"#10b981",
+          amber:  "#f59e0b",
+          rose:   "#f43f5e",
+          cyan:   "#06b6d4",
+        },
+      },
+      borderRadius: { "2xl":"16px", "3xl":"20px", "4xl":"28px" },
+      boxShadow: {
+        "card":        "0 1px 4px rgba(15,23,42,0.06), 0 4px 20px rgba(15,23,42,0.06)",
+        "card-hover":  "0 4px 24px rgba(59,110,240,0.12), 0 1px 4px rgba(15,23,42,0.08)",
+        "sidebar":     "2px 0 20px rgba(15,23,42,0.06)",
+        "glass":       "0 8px 32px rgba(59,110,240,0.10), inset 0 1px 0 rgba(255,255,255,0.9)",
+        "glass-input": "inset 0 1px 3px rgba(15,23,42,0.06)",
+        "btn-primary": "0 4px 16px rgba(59,110,240,0.35), 0 1px 4px rgba(59,110,240,0.2)",
+        "ring-brand":  "0 0 0 3px rgba(59,110,240,0.15)",
+        "kpi":         "0 2px 12px rgba(15,23,42,0.06)",
+        "pill":        "0 0 0 1px rgba(59,110,240,0.2), 0 2px 8px rgba(59,110,240,0.12)",
+      },
+      backgroundImage: {
+        "auth-bg":      "linear-gradient(135deg, #c7d8f8 0%, #d8d0f8 35%, #e8d0f8 65%, #f0c8f0 100%)",
+        "brand-btn":    "linear-gradient(135deg, #2853e0 0%, #6366f1 50%, #8b5cf6 100%)",
+        "kpi-blue":     "linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%)",
+        "kpi-violet":   "linear-gradient(135deg, #f5f3ff 0%, #ede9fe 100%)",
+        "kpi-emerald":  "linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%)",
+        "kpi-amber":    "linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%)",
+        "sidebar-active":"linear-gradient(135deg, #eff6ff 0%, #e0eaff 100%)",
+      },
+      keyframes: {
+        "fade-up":  { "0%":{ opacity:"0", transform:"translateY(14px)" }, "100%":{ opacity:"1", transform:"translateY(0)" } },
+        "fade-in":  { "0%":{ opacity:"0" }, "100%":{ opacity:"1" } },
+        "scale-in": { "0%":{ opacity:"0", transform:"scale(0.94)" }, "100%":{ opacity:"1", transform:"scale(1)" } },
+        "shimmer":  { "0%":{ backgroundPosition:"-400px 0" }, "100%":{ backgroundPosition:"400px 0" } },
+        "float":    { "0%,100%":{ transform:"translateY(0) rotate(0deg)" }, "50%":{ transform:"translateY(-10px) rotate(2deg)" } },
+        "float2":   { "0%,100%":{ transform:"translateY(0) rotate(0deg)" }, "50%":{ transform:"translateY(-14px) rotate(-2deg)" } },
+        "pulse-ring":{"0%,100%":{ opacity:"0.6" }, "50%":{ opacity:"1" } },
+        "slide-in": { "0%":{ transform:"translateX(-16px)", opacity:"0" }, "100%":{ transform:"translateX(0)", opacity:"1" } },
+      },
+      animation: {
+        "fade-up":   "fade-up 0.45s cubic-bezier(0.16,1,0.3,1) forwards",
+        "fade-in":   "fade-in 0.3s ease forwards",
+        "scale-in":  "scale-in 0.2s cubic-bezier(0.16,1,0.3,1) forwards",
+        "shimmer":   "shimmer 1.8s linear infinite",
+        "float":     "float 5s ease-in-out infinite",
+        "float2":    "float2 6s ease-in-out infinite",
+        "pulse-ring":"pulse-ring 2.5s ease-in-out infinite",
+        "slide-in":  "slide-in 0.35s cubic-bezier(0.16,1,0.3,1) forwards",
+      },
+    },
+  },
+  plugins: [],
+};
+export default config;
