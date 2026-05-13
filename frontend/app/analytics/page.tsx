@@ -202,7 +202,7 @@ export default function AnalyticalDashboardPage() {
         .kpi-value { font-size:15px; font-weight:700; color:#2a2f50; letter-spacing:-0.3px; margin-bottom:1px }
         .kpi-change { font-size:9.5px; font-weight:600; color:#2ea86e }
         .kpi-spark { height:20px; margin-top:2px }
-        .content-grid { display:grid; grid-template-columns:1fr 260px; gap:8px; flex:1; min-height:0; margin-top:-6px }
+        .content-grid { display:grid; grid-template-columns:1fr 256px; gap:8px; flex:1; min-height:0 }
         .left-col { display:flex; flex-direction:column; gap:8px; min-height:0 }
         .right-col { display:flex; flex-direction:column; gap:8px; min-height:0 }
         .card { background:rgba(255,255,255,0.88); border-radius:14px; padding:11px 12px; box-shadow:0 2px 12px rgba(100,120,200,0.08); display:flex; flex-direction:column }
@@ -240,53 +240,28 @@ export default function AnalyticalDashboardPage() {
           </div>
         </div>
 
-        <div style={{ display:"grid", gridTemplateColumns:"1fr 256px", gap:"8px", alignItems:"start" }}>
-          <div>
-            <div className="sec-row">
-              <div className="sec-label">KPI cards</div>
-              <div className="filter-btn">All users <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#5a6080" strokeWidth="2"><polyline points="6 9 12 15 18 9"/></svg></div>
-            </div>
-            <div className="kpi-row">
-              {kpis.map((kpi: any, i: number) => (
-                <div key={i} className="kpi-card">
-                  <div className="kpi-icon-wrap" style={{ background: kpiBgColors[i % kpiBgColors.length] }}>
-                    {kpiIcons[i % kpiIcons.length]}
-                  </div>
-                  <div className="kpi-label">{kpi.label}</div>
-                  <div className="kpi-value">{kpi.value}</div>
-                  <div className="kpi-change">{kpi.change}</div>
-                  <MiniSpark dataIndex={kpi.dataIndex || 0} />
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div className="card" style={{ padding:"11px 12px", height:"100%" }}>
-            <div className="card-title" style={{ marginBottom:"8px" }}>SLA Metrics</div>
-            <div className="sla-pair">
-              <SLARing value={sla.uptime} label="Uptime" color="#5b7cf5" dash={sla.uptimeDash} />
-              <SLARing value={sla.responseTime} label="Response Time" color="#6ec6e8" dash={sla.rtDash} />
-            </div>
-            <div style={{ padding:"0 4px" }}>
-              <div className="sla-item" style={{ flexDirection:"row", justifyContent:"flex-start", gap:"8px", marginBottom:"6px" }}>
-                <svg width="56" height="56" viewBox="0 0 56 56" role="img" aria-label="resolution rate ring">
-                  <circle cx="28" cy="28" r="22" fill="none" stroke="rgba(200,210,235,0.5)" strokeWidth="6"/>
-                  <circle cx="28" cy="28" r="22" fill="none" stroke="#9b7cf5" strokeWidth="6"
-                    strokeDasharray={sla.rrDash} strokeLinecap="round"
-                    transform="rotate(-90 28 28)" style={{ filter:"drop-shadow(0 0 3px rgba(155,124,245,0.5))" }}/>
-                  <text x="28" y="32" textAnchor="middle" fontSize="10" fontWeight="700" fill="#2a2f50">{sla.resolutionRate}</text>
-                </svg>
-                <div style={{ flex:1 }}>
-                  <div style={{ fontSize:"11px", fontWeight:600, color:"#5a6080", marginBottom:"5px" }}>Resolution Rate</div>
-                  <div className="res-bar"><div className="res-fill" style={{ width: `${sla.rrPercent}%` }}></div></div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
         <div className="content-grid">
           <div className="left-col">
+            <div>
+              <div className="sec-row">
+                <div className="sec-label">KPI cards</div>
+                <div className="filter-btn">All users <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#5a6080" strokeWidth="2"><polyline points="6 9 12 15 18 9"/></svg></div>
+              </div>
+              <div className="kpi-row">
+                {kpis.map((kpi: any, i: number) => (
+                  <div key={i} className="kpi-card">
+                    <div className="kpi-icon-wrap" style={{ background: kpiBgColors[i % kpiBgColors.length] }}>
+                      {kpiIcons[i % kpiIcons.length]}
+                    </div>
+                    <div className="kpi-label">{kpi.label}</div>
+                    <div className="kpi-value">{kpi.value}</div>
+                    <div className="kpi-change">{kpi.change}</div>
+                    <MiniSpark dataIndex={kpi.dataIndex || 0} />
+                  </div>
+                ))}
+              </div>
+            </div>
+
             <div className="card" style={{ flex:1.2 }}>
               <div className="card-hd">
                 <div className="card-title">AI Demand Forecasting</div>
@@ -343,6 +318,29 @@ export default function AnalyticalDashboardPage() {
           </div>
 
           <div className="right-col">
+            <div className="card" style={{ padding:"11px 12px" }}>
+              <div className="card-title" style={{ marginBottom:"8px" }}>SLA Metrics</div>
+              <div className="sla-pair">
+                <SLARing value={sla.uptime} label="Uptime" color="#5b7cf5" dash={sla.uptimeDash} />
+                <SLARing value={sla.responseTime} label="Response Time" color="#6ec6e8" dash={sla.rtDash} />
+              </div>
+              <div style={{ padding:"0 4px" }}>
+                <div className="sla-item" style={{ flexDirection:"row", justifyContent:"flex-start", gap:"8px", marginBottom:"6px" }}>
+                  <svg width="56" height="56" viewBox="0 0 56 56" role="img" aria-label="resolution rate ring">
+                    <circle cx="28" cy="28" r="22" fill="none" stroke="rgba(200,210,235,0.5)" strokeWidth="6"/>
+                    <circle cx="28" cy="28" r="22" fill="none" stroke="#9b7cf5" strokeWidth="6"
+                      strokeDasharray={sla.rrDash} strokeLinecap="round"
+                      transform="rotate(-90 28 28)" style={{ filter:"drop-shadow(0 0 3px rgba(155,124,245,0.5))" }}/>
+                    <text x="28" y="32" textAnchor="middle" fontSize="10" fontWeight="700" fill="#2a2f50">{sla.resolutionRate}</text>
+                  </svg>
+                  <div style={{ flex:1 }}>
+                    <div style={{ fontSize:"11px", fontWeight:600, color:"#5a6080", marginBottom:"5px" }}>Resolution Rate</div>
+                    <div className="res-bar"><div className="res-fill" style={{ width: `${sla.rrPercent}%` }}></div></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
             <div className="card">
               <div className="card-hd">
                 <div className="card-title">Usage Trends Heatmap</div>
