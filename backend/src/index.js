@@ -4,6 +4,9 @@ import cookieParser from "cookie-parser";
 import morgan from "morgan";
 import config from "./config/config.js";
 import connectDB from "./config/database.js";
+import logger from "./utils/logger.js";
+import { v4 as uuidv4 } from "uuid";
+
 
 // ── Route imports ────────────────────────────────────────
 import authRoutes from "./routes/authRoutes.js";
@@ -30,7 +33,7 @@ app.use(cors({
 }));
 app.use(express.json());
 app.use(cookieParser());
-app.use(morgan("dev"));
+app.use(morgan(config.NODE_ENV === "development" ? "dev" : "combined", { stream: { write: (message) => logger.info(message.trim()) } }));
 
 // ── Health check ─────────────────────────────────────────
 app.get("/health", (req, res) => {
@@ -51,10 +54,17 @@ app.use("/api/journal",   journalRoutes);
 
 // ── Global error handler ────────────────────────────────
 app.use((err, req, res, next) => {
-  console.error("❌ ERROR:", err.message);
+  const errorId = uuidv4();
+  logger.error({
+    id: errorId,
+    message: err.message,
+    stack: err.stack,
+    path: req.path,
+    method: req.method,
+  });
   res.status(err.statusCode || 500).json({
     success: false,
-    message: err.message || "Internal Server Error",
+    message: err.expose ? err.message : `Internal Server Error - Error ID: ${errorId}`,
   });
 });
 
@@ -63,10 +73,10 @@ const start = async () => {
   try {
     await connectDB();
     app.listen(config.PORT, () => {
-      console.log(`🚀 Amdox ERP backend running on http://localhost:${config.PORT}`);
+      logger.info(`🚀 Amdox ERP backend running on http://localhost:${config.PORT}`);
     });
   } catch (err) {
-    console.error("❌ Failed to start server:", err);
+    logger.error("❌ Failed to start server:", err);
     process.exit(1);
   }
 };
