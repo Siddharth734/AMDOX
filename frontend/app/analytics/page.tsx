@@ -122,7 +122,7 @@ function HeatmapMap() {
   return (
     <div style={{ overflowX:"auto" }}>
       <div style={{ minWidth:"200px" }}>
-        <div className="hm-xlbs" style={{ display:"flex", gap:"2px", paddingLeft:"28px", marginTop:"2px" }}>
+        <div className="hm-xlbs" style={{ display:"flex", gap:"2px", paddingLeft:"29px", marginTop:"2px" }}>
           {[2,4,6,8,10,12,14,16,18,20,22,24].map(n => <div key={n} className="hm-xl">{n}</div>)}
         </div>
         {months.map((m, r) => (
@@ -221,10 +221,10 @@ export default function AnalyticalDashboardPage() {
         .ins-body { font-size:10px; color:#5a6080; line-height:1.3; margin-bottom:3px }
         .ins-priority { font-size:9.5px; font-weight:600; color:#5a6080 }
         .ins-dot { width:8px; height:8px; border-radius:50%; display:inline-block; margin-right:4px; vertical-align:middle }
-        .hm-row { display:flex; align-items:center; gap:1px; margin-bottom:1px }
-        .hm-lbl { font-size:8.5px; color:#8890b0; width:22px; text-align:right; flex-shrink:0 }
-        .hm-cell { width:10px; height:10px; border-radius:1.5px; flex-shrink:0 }
-        .hm-xl { font-size:8px; color:#8890b0; width:10px; text-align:center }
+        .hm-row { display:flex; align-items:center; gap:2px; margin-bottom:2px }
+        .hm-lbl { font-size:8.5px; color:#8890b0; width:24px; text-align:right; flex-shrink:0; margin-right:5px }
+        .hm-cell { flex:1; height:13px; border-radius:2.5px }
+        .hm-xl { flex:1; font-size:8px; color:#8890b0; text-align:center }
       `}} />
       
       <div className="anal-wrap custom-scrollbar">
