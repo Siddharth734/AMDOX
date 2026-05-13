@@ -1,124 +1,199 @@
 "use client";
+import "../../erp-module.css";
 import { AppShell } from "@/src/shared/components/app-shell";
-import { GlassCard } from "@/src/shared/ui/glass-card";
-import { Card, CardHeader, CardBody, CardTitle, CardDescription } from "@/src/shared/ui/card";
-import { Table } from "@/src/shared/ui/table";
-import { Button } from "@/src/shared/ui/button";
-import { StatusBadge } from "@/src/shared/ui/badge";
-import { ChartWrapper } from "@/src/shared/ui/chart-wrapper";
-import { Users, TrendingUp, Calendar, Briefcase, Download, Plus } from "lucide-react";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from "recharts";
+import {
+  Users, TrendingUp, Calendar, Briefcase,
+  ArrowUpRight, Plus, UserPlus, Clock,
+} from "lucide-react";
+
+const TICK = { fontSize: 9, fill: "#9099b8", fontFamily: "-apple-system, sans-serif" };
 
 export default function HRDashboard() {
   const kpis = [
-    { label: "Total Employees", value: "248", change: "+8", icon: <Users size={16} className="text-blue-400" />, bg: "rgba(79,142,247,0.1)" },
-    { label: "On Leave Today", value: "12", change: "+2", icon: <Calendar size={16} className="text-amber-400" />, bg: "rgba(251,191,36,0.1)" },
-    { label: "Pending Approvals", value: "7", change: "3 leaves", icon: <TrendingUp size={16} className="text-purple-400" />, bg: "rgba(167,139,250,0.1)" },
-    { label: "Departments", value: "12", change: "Active", icon: <Briefcase size={16} className="text-emerald-400" />, bg: "rgba(52,211,153,0.1)" },
+    { label: "Total Employees", value: "248",  change: "+8 this quarter", up: true,  icon: <Users size={13} className="text-[#5b7cf5]" />, bg: "#e8eeff" },
+    { label: "On Leave Today",  value: "12",   change: "+2 from yesterday", up: false, icon: <Calendar size={13} className="text-[#d08a2e]" />, bg: "#fff6e8" },
+    { label: "Pending Approvals", value: "7",  change: "3 leave requests", up: false, icon: <Clock size={13} className="text-[#9b7cf5]" />, bg: "#f0eeff" },
+    { label: "Departments",     value: "12",   change: "All active",       up: true,  icon: <Briefcase size={13} className="text-[#1fa866]" />, bg: "#e0f8ed" },
   ];
 
   const departmentData = [
-    { name: "Engineering", value: 85, fill: "#4f8ef7" },
-    { name: "Sales", value: 42, fill: "#34d399" },
-    { name: "Finance", value: 28, fill: "#fbbf24" },
-    { name: "HR", value: 15, fill: "#a78bfa" },
-    { name: "Operations", value: 38, fill: "#fb7185" },
-    { name: "Marketing", value: 40, fill: "#06b6d4" },
+    { name: "Engineering", value: 85, fill: "#5b7cf5" },
+    { name: "Sales",       value: 42, fill: "#6ec6e8" },
+    { name: "Finance",     value: 28, fill: "#f5a04a" },
+    { name: "HR",          value: 15, fill: "#9b7cf5" },
+    { name: "Operations",  value: 38, fill: "#38b4e0" },
+    { name: "Marketing",   value: 40, fill: "#e55a8a" },
   ];
 
   const attendanceData = [
-    { week: "Week 1", present: 92, absent: 8 },
-    { week: "Week 2", present: 95, absent: 5 },
-    { week: "Week 3", present: 88, absent: 12 },
-    { week: "Week 4", present: 93, absent: 7 },
-    { week: "Week 5", present: 96, absent: 4 },
+    { name: "Week 1", present: 92, absent: 8 },
+    { name: "Week 2", present: 95, absent: 5 },
+    { name: "Week 3", present: 88, absent: 12 },
+    { name: "Week 4", present: 93, absent: 7 },
+    { name: "Week 5", present: 96, absent: 4 },
   ];
 
   const employees = [
-    { id: 1, name: "John Smith", role: "Senior Engineer", department: "Engineering", status: "active", joining: "2024-01-15" },
-    { id: 2, name: "Sarah Johnson", role: "Sales Manager", department: "Sales", status: "active", joining: "2024-02-20" },
-    { id: 3, name: "Mike Chen", role: "Finance Analyst", department: "Finance", status: "on-leave", joining: "2024-03-10" },
-    { id: 4, name: "Emma Davis", role: "HR Specialist", department: "HR", status: "active", joining: "2024-04-05" },
+    { name: "John Smith",     role: "Senior Engineer",  dept: "Engineering", status: "active",   joined: "Jan 15, 2024", initials: "JS", avatarBg: "#b0bce8" },
+    { name: "Sarah Johnson",  role: "Sales Manager",    dept: "Sales",       status: "active",   joined: "Feb 20, 2024", initials: "SJ", avatarBg: "#b8e0c8" },
+    { name: "Mike Chen",      role: "Finance Analyst",  dept: "Finance",     status: "on-leave", joined: "Mar 10, 2024", initials: "MC", avatarBg: "#e8d0b0" },
+    { name: "Emma Davis",     role: "HR Specialist",    dept: "HR",          status: "active",   joined: "Apr 05, 2024", initials: "ED", avatarBg: "#c8b8f0" },
+    { name: "Alex Rivera",    role: "DevOps Lead",      dept: "Engineering", status: "active",   joined: "May 12, 2024", initials: "AR", avatarBg: "#b0d8e8" },
+  ];
+
+  const leaveRequests = [
+    { name: "David Park",   type: "Annual Leave",  dates: "May 15–19", status: "pending" },
+    { name: "Lisa Wang",    type: "Sick Leave",     dates: "May 13",    status: "pending" },
+    { name: "Tom Bradley",  type: "Personal",       dates: "May 20–21", status: "pending" },
   ];
 
   return (
     <AppShell requiredModule="hr">
-      <div className="max-w-[1440px] mx-auto animate-[fade-in_0.4s_ease_forwards]">
-        <div className="mb-8 flex items-center justify-between">
+      <div className="erp-page">
+        {/* Topbar */}
+        <div className="erp-topbar">
           <div>
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full mb-3 text-[11px] font-mono border" style={{ background:"rgba(167,139,250,0.1)", borderColor:"rgba(167,139,250,0.25)", color:"#a78bfa" }}>
+            <div className="erp-badge" style={{ background: "#f0eeff", color: "#9b7cf5" }}>
               <Users size={10} /> HR MODULE
             </div>
-            <h1 className="text-[26px] font-display font-bold text-slate-800">HR Dashboard</h1>
-            <p className="text-[13px] text-[#5c667e] mt-1.5 font-mono">Employee lifecycle · Leave · Payroll · Compliance</p>
+            <div className="pg-title">HR Dashboard</div>
+            <div className="pg-subtitle">Employee lifecycle · Leave · Payroll · Compliance</div>
           </div>
-          <div className="flex gap-2">
-            <Button variant="outline" icon={<Download size={14} />}>Export</Button>
-            <Button variant="primary" icon={<Plus size={14} />}>Add Employee</Button>
+          <div className="erp-topbar-actions">
+            <button className="erp-topbar-btn"><TrendingUp size={13} /> Reports</button>
+            <button className="erp-topbar-btn primary"><UserPlus size={13} /> Add Employee</button>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-          {kpis.map((kpi, i) => (
-            <GlassCard key={i} padding="md">
-              <div className="flex items-start justify-between">
-                <div>
-                  <p className="text-[11px] text-[#5c667e] font-mono uppercase tracking-wider mb-1">{kpi.label}</p>
-                  <p className="text-[22px] font-bold text-white mb-2">{kpi.value}</p>
-                  <p className="text-[11px] font-mono text-[#9aa3bb]">{kpi.change}</p>
-                </div>
-                <div className="p-2.5 rounded-lg" style={{ background: kpi.bg }}>{kpi.icon}</div>
+        {/* KPI Row */}
+        <div className="erp-kpi-row cols-4">
+          {kpis.map((k, i) => (
+            <div key={i} className="erp-kpi" style={{ background: k.bg }}>
+              <div className="erp-kpi-icon" style={{ background: "rgba(255,255,255,0.7)" }}>{k.icon}</div>
+              <div className="erp-kpi-label">{k.label}</div>
+              <div className="erp-kpi-value">{k.value}</div>
+              <div className={`erp-kpi-change ${k.up ? "up" : ""}`}>
+                <ArrowUpRight size={10} /> {k.change}
               </div>
-            </GlassCard>
+            </div>
           ))}
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
-          <ChartWrapper title="Department Distribution" subtitle="248 total employees">
-            <ResponsiveContainer width="100%" height={250}>
-              <PieChart>
-                <Pie data={departmentData} cx="50%" cy="50%" innerRadius={60} outerRadius={90} paddingAngle={2} dataKey="value">
-                  {departmentData.map((entry, idx) => <Cell key={idx} fill={entry.fill} />)}
-                </Pie>
-              </PieChart>
-            </ResponsiveContainer>
-          </ChartWrapper>
+        {/* Charts Row */}
+        <div className="erp-grid-main" style={{ gridTemplateColumns: "1fr 1fr 280px" }}>
+          {/* Department Distribution */}
+          <div className="erp-card">
+            <div className="erp-card-hd">
+              <div className="erp-card-title">Department Distribution</div>
+              <div className="erp-card-subtitle">248 total employees</div>
+            </div>
+            <div style={{ height: "200px", display: "flex", alignItems: "center", justifyContent: "center" }}>
+              <ResponsiveContainer width="100%" height="100%">
+                <PieChart>
+                  <Pie data={departmentData} cx="50%" cy="50%" innerRadius={55} outerRadius={80} paddingAngle={3} dataKey="value">
+                    {departmentData.map((entry, idx) => <Cell key={idx} fill={entry.fill} />)}
+                  </Pie>
+                  <Tooltip contentStyle={{ borderRadius: "8px", border: "1px solid rgba(200,210,235,0.4)", padding: "6px", fontSize: "10px" }} />
+                </PieChart>
+              </ResponsiveContainer>
+            </div>
+            <div style={{ display: "flex", flexWrap: "wrap", gap: "8px", justifyContent: "center", marginTop: "4px" }}>
+              {departmentData.map((d, i) => (
+                <span key={i} style={{ display: "flex", alignItems: "center", gap: "4px", fontSize: "10px", color: "#5a6080" }}>
+                  <span style={{ width: "6px", height: "6px", borderRadius: "50%", background: d.fill }} />
+                  {d.name} ({d.value})
+                </span>
+              ))}
+            </div>
+          </div>
 
-          <div className="lg:col-span-2">
-            <ChartWrapper title="Attendance Trend" subtitle="Last 5 weeks">
-              <ResponsiveContainer width="100%" height={250}>
-                <BarChart data={attendanceData} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.06)" />
-                  <XAxis dataKey="week" stroke="#5c667e" />
-                  <YAxis stroke="#5c667e" />
-                  <Tooltip cursor={{ fill: "rgba(255,255,255,0.05)" }} />
-                  <Bar dataKey="present" fill="#34d399" radius={[4, 4, 0, 0]} />
-                  <Bar dataKey="absent" fill="#fb7185" radius={[4, 4, 0, 0]} />
+          {/* Attendance Trend */}
+          <div className="erp-card">
+            <div className="erp-card-hd">
+              <div className="erp-card-title">Attendance Trend</div>
+              <div className="erp-card-menu">···</div>
+            </div>
+            <div style={{ height: "230px", marginLeft: "-20px" }}>
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={attendanceData} margin={{ top: 10, right: 5, left: 0, bottom: 0 }}>
+                  <CartesianGrid vertical={false} stroke="rgba(200,210,235,0.25)" strokeDasharray="3 3" />
+                  <XAxis dataKey="name" tick={TICK} axisLine={false} tickLine={false} />
+                  <YAxis tick={TICK} axisLine={false} tickLine={false} />
+                  <Tooltip cursor={{ fill: "transparent" }} contentStyle={{ borderRadius: "8px", border: "1px solid rgba(200,210,235,0.4)", padding: "6px", fontSize: "10px" }} />
+                  <Bar dataKey="present" fill="rgba(91,124,245,0.85)" barSize={22} radius={[0,0,0,0]} name="Present %" />
+                  <Bar dataKey="absent" fill="rgba(166,198,245,0.6)" barSize={22} radius={[4,4,0,0]} name="Absent %" />
                 </BarChart>
               </ResponsiveContainer>
-            </ChartWrapper>
+            </div>
+          </div>
+
+          {/* Leave Requests */}
+          <div className="erp-card" style={{ flex: 1 }}>
+            <div className="erp-card-hd">
+              <div className="erp-card-title">Leave Requests</div>
+              <div style={{ fontSize: "10px", fontWeight: 600, color: "#5b7cf5", background: "#eef1ff", padding: "3px 10px", borderRadius: "6px" }}>
+                {leaveRequests.length} pending
+              </div>
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: "8px", flex: 1 }}>
+              {leaveRequests.map((lr, i) => (
+                <div key={i} className="erp-timeline-item" style={{ padding: "8px 0" }}>
+                  <div className="erp-timeline-dot" style={{ background: "#f0eeff" }}>
+                    <Calendar size={12} className="text-[#9b7cf5]" />
+                  </div>
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <div className="erp-timeline-title">{lr.name}</div>
+                    <div className="erp-timeline-time">{lr.type} · {lr.dates}</div>
+                  </div>
+                  <span className="erp-status pending"><span className="dot" />Pending</span>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
 
-        <Card>
-          <CardHeader>
-            <CardTitle>Team Members</CardTitle>
-            <CardDescription>Recent employees and their status</CardDescription>
-          </CardHeader>
-          <CardBody>
-            <Table
-              columns={[
-                { key: "name", header: "Name", width: "25%" },
-                { key: "role", header: "Position" },
-                { key: "department", header: "Department" },
-                { key: "status", header: "Status", render: (val) => <StatusBadge status={val as string} /> },
-                { key: "joining", header: "Joined" },
-              ]}
-              data={employees}
-              keyField="id"
-            />
-          </CardBody>
-        </Card>
+        {/* Team Members Table */}
+        <div className="erp-card">
+          <div className="erp-card-hd">
+            <div>
+              <div className="erp-card-title">Team Members</div>
+              <div className="erp-card-subtitle">Recent employees and their status</div>
+            </div>
+            <div className="erp-card-menu">···</div>
+          </div>
+          <div className="erp-table-wrap">
+            <table className="erp-table">
+              <thead>
+                <tr>
+                  <th style={{ width: "30%" }}>Employee</th>
+                  <th>Position</th>
+                  <th>Department</th>
+                  <th>Status</th>
+                  <th>Joined</th>
+                </tr>
+              </thead>
+              <tbody>
+                {employees.map((e, i) => (
+                  <tr key={i}>
+                    <td>
+                      <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                        <div style={{ width: "28px", height: "28px", borderRadius: "50%", background: e.avatarBg, display: "flex", alignItems: "center", justifyContent: "center", fontSize: "9px", fontWeight: 700, color: "#fff", flexShrink: 0 }}>
+                          {e.initials}
+                        </div>
+                        <span style={{ fontWeight: 600, color: "#1e2845" }}>{e.name}</span>
+                      </div>
+                    </td>
+                    <td>{e.role}</td>
+                    <td>{e.dept}</td>
+                    <td><span className={`erp-status ${e.status}`}><span className="dot" />{e.status === "active" ? "Active" : "On Leave"}</span></td>
+                    <td>{e.joined}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
       </div>
     </AppShell>
   );

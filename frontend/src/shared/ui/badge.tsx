@@ -23,33 +23,35 @@ export function RoleBadge({ role, size = "sm" }: { role: Role; size?: "sm" | "md
   );
 }
 
-/* ── Status Badge ───────────────────────────────── */
-const STATUS: Record<string, { label: string; bg: string; border: string; text: string }> = {
-  active:         { label:"Active",        bg:"rgba(52,211,153,0.12)",  border:"rgba(52,211,153,0.25)",  text:"#34d399" },
-  inactive:       { label:"Inactive",      bg:"rgba(255,255,255,0.05)", border:"rgba(255,255,255,0.10)", text:"#5c667e" },
-  "on-leave":     { label:"On Leave",      bg:"rgba(167,139,250,0.12)", border:"rgba(167,139,250,0.25)", text:"#a78bfa" },
-  pending:        { label:"Pending",       bg:"rgba(251,191,36,0.12)",  border:"rgba(251,191,36,0.25)",  text:"#fbbf24" },
-  completed:      { label:"Completed",     bg:"rgba(52,211,153,0.12)",  border:"rgba(52,211,153,0.25)",  text:"#34d399" },
-  "in-progress":  { label:"In Progress",   bg:"rgba(79,142,247,0.12)",  border:"rgba(79,142,247,0.25)",  text:"#4f8ef7" },
-  "on-hold":      { label:"On Hold",       bg:"rgba(251,113,133,0.12)", border:"rgba(251,113,133,0.25)", text:"#fb7185" },
-  planning:       { label:"Planning",      bg:"rgba(167,139,250,0.12)", border:"rgba(167,139,250,0.25)", text:"#a78bfa" },
-  "in-stock":     { label:"In Stock",      bg:"rgba(52,211,153,0.12)",  border:"rgba(52,211,153,0.25)",  text:"#34d399" },
-  "low-stock":    { label:"Low Stock",     bg:"rgba(251,191,36,0.12)",  border:"rgba(251,191,36,0.25)",  text:"#fbbf24" },
-  "out-of-stock": { label:"Out of Stock",  bg:"rgba(244,114,182,0.12)", border:"rgba(244,114,182,0.25)", text:"#f472b6" },
-  critical:       { label:"Critical",      bg:"rgba(251,113,133,0.12)", border:"rgba(251,113,133,0.25)", text:"#fb7185" },
-  high:           { label:"High",          bg:"rgba(251,113,133,0.12)", border:"rgba(251,113,133,0.25)", text:"#fb7185" },
-  medium:         { label:"Medium",        bg:"rgba(251,191,36,0.12)",  border:"rgba(251,191,36,0.25)",  text:"#fbbf24" },
-  low:            { label:"Low",           bg:"rgba(255,255,255,0.05)", border:"rgba(255,255,255,0.10)", text:"#5c667e" },
+/* ── Status Badge (light theme) ─────────────────── */
+const STATUS: Record<string, { label: string; bg: string; color: string }> = {
+  active:         { label:"Active",        bg:"#e0f8ed", color:"#1fa866" },
+  inactive:       { label:"Inactive",      bg:"#f0f2f8", color:"#8890b0" },
+  "on-leave":     { label:"On Leave",      bg:"#fff6e8", color:"#d08a2e" },
+  pending:        { label:"Pending",       bg:"#fff6e8", color:"#d08a2e" },
+  completed:      { label:"Completed",     bg:"#e0f8ed", color:"#1fa866" },
+  "in-progress":  { label:"In Progress",   bg:"#e8eeff", color:"#5b7cf5" },
+  "on-hold":      { label:"On Hold",       bg:"#fff0f0", color:"#d04848" },
+  planning:       { label:"Planning",      bg:"#f0eeff", color:"#9b7cf5" },
+  "in-stock":     { label:"In Stock",      bg:"#e0f8ed", color:"#1fa866" },
+  "low-stock":    { label:"Low Stock",     bg:"#fff6e8", color:"#d08a2e" },
+  "out-of-stock": { label:"Out of Stock",  bg:"#fff0f0", color:"#d04848" },
+  critical:       { label:"Critical",      bg:"#fff0f0", color:"#d04848" },
+  high:           { label:"High",          bg:"#fff0f0", color:"#d04848" },
+  medium:         { label:"Medium",        bg:"#fff6e8", color:"#d08a2e" },
+  low:            { label:"Low",           bg:"#f0f2f8", color:"#8890b0" },
+  processing:     { label:"Processing",    bg:"#fff6e8", color:"#d08a2e" },
+  ready:          { label:"Ready",         bg:"#e0f8ed", color:"#1fa866" },
 };
 
 export function StatusBadge({ status, dot = true, className }: { status: string; dot?: boolean; className?: string }) {
-  const cfg = STATUS[status] ?? { label: status, bg:"rgba(255,255,255,0.05)", border:"rgba(255,255,255,0.10)", text:"#9aa3bb" };
+  const cfg = STATUS[status] ?? { label: status, bg:"#f0f2f8", color:"#8890b0" };
   return (
     <span
-      className={cn("inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[11px] font-mono font-medium border", className)}
-      style={{ background: cfg.bg, borderColor: cfg.border, color: cfg.text }}
+      className={cn("erp-status", status, className)}
+      style={{ background: cfg.bg, color: cfg.color }}
     >
-      {dot && <span className="w-1.5 h-1.5 rounded-full bg-current opacity-80" />}
+      {dot && <span className="dot" style={{ background: cfg.color }} />}
       {cfg.label}
     </span>
   );
@@ -57,15 +59,21 @@ export function StatusBadge({ status, dot = true, className }: { status: string;
 
 /* ── Module chip ────────────────────────────────── */
 const MODULE_COLORS: Record<string, string> = {
-  HR:        "#a78bfa", Finance:"#34d399", Supply:"#fbbf24",
-  Analytics: "#4f8ef7", AI:     "#06b6d4",
+  HR:        "#9b7cf5", Finance:"#1fa866", Supply:"#d08a2e",
+  Analytics: "#5b7cf5", AI:     "#38b4e0", Projects:"#c0550a",
 };
 export function ModuleChip({ module }: { module: string }) {
-  const c = MODULE_COLORS[module] ?? "#9aa3bb";
+  const c = MODULE_COLORS[module] ?? "#5a6080";
   return (
     <span
-      className="text-[10px] font-mono font-medium px-2 py-0.5 rounded-full"
-      style={{ background:`${c}15`, color: c }}
+      style={{
+        fontSize: "10px",
+        fontWeight: 600,
+        padding: "2px 8px",
+        borderRadius: "6px",
+        background: `${c}18`,
+        color: c,
+      }}
     >
       {module}
     </span>

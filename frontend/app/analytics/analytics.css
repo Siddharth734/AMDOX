@@ -1,0 +1,51 @@
+/* ═══════════════════════════════════════════════════════════
+   Analytics Dashboard CSS
+   Extracted from embedded <style> tag
+   ═══════════════════════════════════════════════════════════ */
+
+.anal-wrap { display:flex; flex-direction:column; gap:8px; min-width:0; height:calc(100vh - 36px); overflow:hidden; padding-right:4px }
+
+/* Analytics uses its own scoped versions of these common classes */
+.anal-wrap .topbar { display:flex; align-items:center; justify-content:space-between; margin-bottom: 2px; }
+.anal-wrap .pg-title { font-size:22px; font-weight:700; color:#2a2f50; letter-spacing:-0.3px }
+.anal-wrap .tb-icons { display:flex; gap:6px }
+.anal-wrap .tb-icon { width:28px; height:28px; border-radius:7px; background:rgba(255,255,255,0.7); display:flex; align-items:center; justify-content:center }
+.anal-wrap .sec-row { display:flex; align-items:center; justify-content:space-between; margin-bottom:6px }
+.anal-wrap .sec-label { font-size:13px; font-weight:600; color:#3a3f5c }
+.anal-wrap .filter-btn { display:flex; align-items:center; gap:4px; padding:4px 10px; background:rgba(255,255,255,0.75); border-radius:8px; font-size:11.5px; color:#5a6080; border:1px solid rgba(200,210,235,0.6) }
+.anal-wrap .kpi-row { display:grid; grid-template-columns:repeat(5,1fr); gap:6px }
+.anal-wrap .kpi-card { background:rgba(255,255,255,0.88); border-radius:14px; padding:10px 11px 7px; box-shadow:0 2px 12px rgba(100,120,200,0.08) }
+.anal-wrap .kpi-icon-wrap { width:20px; height:20px; border-radius:6px; display:flex; align-items:center; justify-content:center; margin-bottom:4px }
+.anal-wrap .kpi-label { font-size:9.5px; color:#8890b0; font-weight:500; margin-bottom:1px }
+.anal-wrap .kpi-value { font-size:15px; font-weight:700; color:#2a2f50; letter-spacing:-0.3px; margin-bottom:1px }
+.anal-wrap .kpi-change { font-size:9.5px; font-weight:600; color:#2ea86e }
+.anal-wrap .kpi-spark { height:20px; margin-top:2px }
+.anal-wrap .content-grid { display:grid; grid-template-columns:1fr 260px; gap:8px; flex:1; min-height:0 }
+.anal-wrap .left-col { display:flex; flex-direction:column; gap:8px; min-height:0 }
+.anal-wrap .right-col { display:flex; flex-direction:column; gap:8px; min-height:0 }
+.anal-wrap .card { background:rgba(255,255,255,0.88); border-radius:14px; padding:11px 12px; box-shadow:0 2px 12px rgba(100,120,200,0.08); display:flex; flex-direction:column }
+.anal-wrap .card-hd { display:flex; align-items:center; justify-content:space-between; margin-bottom:8px }
+.anal-wrap .card-title { font-size:12px; font-weight:700; color:#2a2f50 }
+.anal-wrap .card-menu { color:#9099b8; font-size:15px; letter-spacing:1px; cursor:default; line-height:1 }
+.anal-wrap .date-btn { display:flex; align-items:center; gap:4px; padding:3px 9px; background:#fff; border-radius:7px; border:1px solid rgba(200,210,235,0.8); font-size:10px; color:#5a6080; cursor:default }
+
+/* SLA */
+.sla-pair { display:flex; justify-content:space-around; margin-bottom:6px }
+.sla-item { display:flex; flex-direction:column; align-items:center; gap:4px }
+.sla-sublabel { font-size:10px; color:#8890b0; text-align:center }
+.res-bar { height:6px; border-radius:3px; background:rgba(200,210,235,0.4); overflow:hidden; margin-bottom:1px }
+.res-fill { height:100%; border-radius:3px; background:linear-gradient(90deg,#6ec6e8,#9b7cf5) }
+
+/* Insights */
+.insight-item { padding:6px 8px; border-radius:8px; border:1px solid rgba(200,210,235,0.5); margin-bottom:4px; background:rgba(255,255,255,0.5) }
+.insight-item:last-child { margin-bottom:0 }
+.ins-title { font-size:12px; font-weight:700; color:#2a2f50; margin-bottom:3px }
+.ins-body { font-size:10px; color:#5a6080; line-height:1.3; margin-bottom:3px }
+.ins-priority { font-size:9.5px; font-weight:600; color:#5a6080 }
+.ins-dot { width:8px; height:8px; border-radius:50%; display:inline-block; margin-right:4px; vertical-align:middle }
+
+/* Heatmap */
+.hm-row { display:flex; align-items:center; gap:1px; margin-bottom:1px }
+.hm-lbl { font-size:8.5px; color:#8890b0; width:22px; text-align:right; flex-shrink:0 }
+.hm-cell { width:10px; height:10px; border-radius:1.5px; flex-shrink:0 }
+.hm-xl { font-size:8px; color:#8890b0; width:10px; text-align:center }

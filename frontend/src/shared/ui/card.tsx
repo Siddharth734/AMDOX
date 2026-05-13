@@ -15,7 +15,7 @@ export function Card({ children, className }: CardProps) {
   return (
     <div
       className={cn(
-        "glass-card rounded-2xl overflow-hidden",
+        "erp-card rounded-2xl overflow-hidden",
         className,
       )}
     >
@@ -26,7 +26,7 @@ export function Card({ children, className }: CardProps) {
 
 export function CardHeader({ children, className }: CardHeaderProps) {
   return (
-    <div className={cn("p-5 border-b border-white/[0.05]", className)}>
+    <div className={cn("p-5", className)} style={{ borderBottom: "1px solid rgba(200,210,235,0.25)" }}>
       {children}
     </div>
   );
@@ -42,7 +42,7 @@ export function CardBody({ children, className }: CardBodyProps) {
 
 export function CardFooter({ children, className }: CardFooterProps) {
   return (
-    <div className={cn("p-5 border-t border-white/[0.05]", className)}>
+    <div className={cn("p-5", className)} style={{ borderTop: "1px solid rgba(200,210,235,0.25)" }}>
       {children}
     </div>
   );
@@ -50,7 +50,7 @@ export function CardFooter({ children, className }: CardFooterProps) {
 
 export function CardTitle({ children, className }: CardTitleProps) {
   return (
-    <h3 className={cn("text-lg font-semibold text-white", className)}>
+    <h3 className={cn("text-lg font-semibold text-[#1e2845]", className)}>
       {children}
     </h3>
   );
@@ -58,7 +58,7 @@ export function CardTitle({ children, className }: CardTitleProps) {
 
 export function CardDescription({ children, className }: CardDescriptionProps) {
   return (
-    <p className={cn("text-sm text-[#9aa3bb]", className)}>
+    <p className={cn("text-sm text-[#8890b0]", className)}>
       {children}
     </p>
   );

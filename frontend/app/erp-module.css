@@ -1,0 +1,545 @@
+/* ═══════════════════════════════════════════════════════════
+   ERP Module — Shared CSS
+   Used by: HR, Inventory, Projects, Reports, Settings, Finance
+   ═══════════════════════════════════════════════════════════ */
+
+/* ── Page wrapper ──────────────────────────────── */
+.erp-page {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  overflow: auto;
+  padding-right: 4px;
+}
+
+/* ── Topbar ────────────────────────────────────── */
+.erp-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+  margin-bottom: 2px;
+}
+
+.erp-topbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.erp-topbar-btn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 14px;
+  border-radius: 9px;
+  border: 1px solid rgba(200, 214, 240, 0.7);
+  background: rgba(255, 255, 255, 0.8);
+  font-size: 12px;
+  font-weight: 600;
+  color: #5a6080;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+.erp-topbar-btn:hover {
+  background: #fff;
+  border-color: rgba(91, 124, 245, 0.4);
+  color: #3a4570;
+}
+.erp-topbar-btn.primary {
+  background: linear-gradient(135deg, #5b7cf5, #7b8ff8);
+  color: #fff;
+  border: none;
+  box-shadow: 0 3px 12px rgba(91, 124, 245, 0.35);
+}
+.erp-topbar-btn.primary:hover {
+  box-shadow: 0 5px 18px rgba(91, 124, 245, 0.45);
+  transform: translateY(-1px);
+}
+
+/* ── Badge ─────────────────────────────────────── */
+.erp-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 10px;
+  border-radius: 6px;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 4px;
+}
+
+/* ── Page title (shared with dashboard.css) ────── */
+.pg-title {
+  font-size: 22px;
+  font-weight: 700;
+  color: #1e2845;
+  letter-spacing: -0.3px;
+}
+.pg-subtitle {
+  font-size: 11px;
+  color: #8890b0;
+  margin-top: 2px;
+}
+
+/* ── KPI Row ───────────────────────────────────── */
+.erp-kpi-row {
+  display: grid;
+  gap: 8px;
+}
+.erp-kpi-row.cols-4 {
+  grid-template-columns: repeat(4, 1fr);
+}
+.erp-kpi-row.cols-5 {
+  grid-template-columns: repeat(5, 1fr);
+}
+
+.erp-kpi {
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 14px;
+  padding: 12px 14px 8px;
+  box-shadow: 0 2px 12px rgba(100, 120, 200, 0.07);
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+.erp-kpi:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 24px rgba(100, 120, 200, 0.14);
+}
+
+.erp-kpi-icon {
+  width: 26px;
+  height: 26px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 6px;
+  flex-shrink: 0;
+}
+
+.erp-kpi-label {
+  font-size: 10px;
+  color: #8890b0;
+  font-weight: 500;
+  margin-bottom: 2px;
+  white-space: nowrap;
+}
+
+.erp-kpi-value {
+  font-size: 18px;
+  font-weight: 700;
+  color: #1a2038;
+  letter-spacing: -0.3px;
+  line-height: 1.1;
+  margin-bottom: 2px;
+}
+
+.erp-kpi-change {
+  font-size: 10px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  color: #8890b0;
+}
+.erp-kpi-change.up {
+  color: #1fa866;
+}
+.erp-kpi-change.down {
+  color: #d04848;
+}
+
+.erp-kpi-spark {
+  height: 22px;
+  margin-top: 4px;
+}
+
+/* ── Cards ─────────────────────────────────────── */
+.erp-card {
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 14px;
+  padding: 14px 16px;
+  box-shadow: 0 2px 12px rgba(100, 120, 200, 0.07);
+  display: flex;
+  flex-direction: column;
+  transition: box-shadow 0.18s ease;
+}
+.erp-card:hover {
+  box-shadow: 0 4px 20px rgba(100, 120, 200, 0.12);
+}
+
+.erp-card-hd {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  flex-shrink: 0;
+}
+
+.erp-card-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: #1e2845;
+}
+
+.erp-card-subtitle {
+  font-size: 10px;
+  color: #8890b0;
+  margin-top: 2px;
+}
+
+.erp-card-menu {
+  color: #9099b8;
+  font-size: 16px;
+  letter-spacing: 2px;
+  cursor: pointer;
+  line-height: 1;
+}
+
+/* ── Grid layouts ──────────────────────────────── */
+.erp-grid-main {
+  display: grid;
+  grid-template-columns: 1fr 280px;
+  gap: 8px;
+}
+
+.erp-grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.erp-grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+/* ── Section row ───────────────────────────────── */
+.erp-sec-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+  margin-top: 4px;
+}
+
+.erp-sec-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #3a3f5c;
+}
+
+/* ── Tables ────────────────────────────────────── */
+.erp-table-wrap {
+  overflow-x: auto;
+}
+
+.erp-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.erp-table thead tr {
+  border-bottom: 1px solid rgba(200, 210, 235, 0.4);
+}
+.erp-table th {
+  text-align: left;
+  font-size: 10px;
+  font-weight: 600;
+  color: #8890b0;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 8px 14px;
+}
+.erp-table td {
+  font-size: 12px;
+  color: #5a6080;
+  padding: 10px 14px;
+}
+.erp-table tbody tr {
+  border-bottom: 1px solid rgba(200, 210, 235, 0.15);
+  transition: background 0.15s ease;
+}
+.erp-table tbody tr:hover {
+  background: rgba(91, 124, 245, 0.03);
+}
+
+/* ── Status badges ─────────────────────────────── */
+.erp-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 10px;
+  font-weight: 600;
+  padding: 3px 9px;
+  border-radius: 6px;
+}
+.erp-status .dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.erp-status.active          { background: #e0f8ed; color: #1fa866; }
+.erp-status.active .dot     { background: #1fa866; }
+.erp-status.on-leave        { background: #fff6e8; color: #d08a2e; }
+.erp-status.on-leave .dot   { background: #d08a2e; }
+.erp-status.in-progress     { background: #e8eeff; color: #5b7cf5; }
+.erp-status.in-progress .dot{ background: #5b7cf5; }
+.erp-status.completed       { background: #e0f8ed; color: #1fa866; }
+.erp-status.completed .dot  { background: #1fa866; }
+.erp-status.pending         { background: #fff6e8; color: #d08a2e; }
+.erp-status.pending .dot    { background: #d08a2e; }
+.erp-status.processing      { background: #fff6e8; color: #d08a2e; }
+.erp-status.processing .dot { background: #d08a2e; }
+.erp-status.in-stock        { background: #e0f8ed; color: #1fa866; }
+.erp-status.in-stock .dot   { background: #1fa866; }
+.erp-status.low-stock       { background: #fff6e8; color: #d08a2e; }
+.erp-status.low-stock .dot  { background: #d08a2e; }
+.erp-status.out-of-stock    { background: #fff0f0; color: #d04848; }
+.erp-status.out-of-stock .dot { background: #d04848; }
+.erp-status.planning        { background: #f0eeff; color: #9b7cf5; }
+.erp-status.planning .dot   { background: #9b7cf5; }
+.erp-status.on-hold         { background: #fff0f0; color: #d04848; }
+.erp-status.on-hold .dot    { background: #d04848; }
+
+/* ── Progress bar ──────────────────────────────── */
+.erp-progress {
+  height: 5px;
+  border-radius: 3px;
+  background: rgba(200, 210, 235, 0.3);
+  overflow: hidden;
+}
+.erp-progress-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.5s ease;
+}
+
+/* ── Timeline / Activity ───────────────────────── */
+.erp-timeline-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(200, 210, 235, 0.15);
+}
+.erp-timeline-item:last-child {
+  border-bottom: none;
+}
+
+.erp-timeline-dot {
+  width: 30px;
+  height: 30px;
+  border-radius: 9px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.erp-timeline-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: #1e2845;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.erp-timeline-time {
+  font-size: 10px;
+  color: #9099b8;
+  margin-top: 1px;
+}
+
+/* ── Tabs ──────────────────────────────────────── */
+.erp-tabs {
+  display: flex;
+  gap: 2px;
+  background: rgba(200, 210, 235, 0.15);
+  border-radius: 8px;
+  padding: 3px;
+}
+
+.erp-tab {
+  padding: 5px 14px;
+  border-radius: 6px;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: #5a6080;
+  cursor: pointer;
+  border: none;
+  background: transparent;
+  transition: all 0.18s ease;
+}
+.erp-tab:hover {
+  color: #3a4570;
+  background: rgba(255, 255, 255, 0.4);
+}
+.erp-tab.active {
+  background: #fff;
+  color: #5b7cf5;
+  box-shadow: 0 1px 4px rgba(100, 120, 200, 0.12);
+}
+
+/* ── Avatars (overlapping) ─────────────────────── */
+.erp-avatars {
+  display: flex;
+}
+.erp-avatar {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 8px;
+  font-weight: 700;
+  color: #fff;
+  border: 2px solid #fff;
+  margin-left: -6px;
+  flex-shrink: 0;
+}
+.erp-avatar:first-child {
+  margin-left: 0;
+}
+
+/* ── Settings card ─────────────────────────────── */
+.erp-setting-card {
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 14px;
+  padding: 16px;
+  box-shadow: 0 2px 12px rgba(100, 120, 200, 0.07);
+  display: flex;
+  flex-direction: column;
+  transition: box-shadow 0.18s ease, transform 0.18s ease;
+  cursor: pointer;
+}
+.erp-setting-card:hover {
+  box-shadow: 0 4px 20px rgba(100, 120, 200, 0.12);
+  transform: translateY(-1px);
+}
+
+.erp-setting-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+
+.erp-setting-label {
+  font-size: 14px;
+  font-weight: 700;
+  color: #1e2845;
+  margin-bottom: 3px;
+}
+
+.erp-setting-desc {
+  font-size: 10.5px;
+  color: #8890b0;
+  line-height: 1.4;
+}
+
+/* ── Finance-specific ──────────────────────────── */
+.fin-chart-wrap {
+  height: 220px;
+  margin-left: -20px;
+}
+
+.fin-legend {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 10px;
+  color: #8890b0;
+}
+.fin-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.fin-legend-dot {
+  width: 8px;
+  height: 2px;
+  border-radius: 1px;
+}
+
+.fin-summary-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(200, 210, 235, 0.2);
+}
+.fin-summary-row:last-child {
+  border-bottom: none;
+}
+.fin-summary-label {
+  font-size: 11.5px;
+  color: #5a6080;
+}
+.fin-summary-value {
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.fin-working-cap {
+  margin-top: 14px;
+  padding: 10px 14px;
+  background: rgba(91, 124, 245, 0.06);
+  border-radius: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.fin-working-cap-label {
+  font-size: 12px;
+  font-weight: 700;
+  color: #3a4570;
+}
+.fin-working-cap-value {
+  font-size: 16px;
+  font-weight: 700;
+  color: #5b7cf5;
+}
+
+/* ── Transaction table (finance) ───────────────── */
+.fin-tx-type {
+  font-size: 10px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+.fin-tx-type.income  { background: #e0f8ed; color: #1fa866; }
+.fin-tx-type.expense { background: #fff0f0; color: #d04848; }
+
+/* ── Responsive ────────────────────────────────── */
+@media (max-width: 1100px) {
+  .erp-grid-main { grid-template-columns: 1fr; }
+  .erp-kpi-row.cols-5 { grid-template-columns: repeat(3, 1fr); }
+}
+
+@media (max-width: 900px) {
+  .erp-grid-2 { grid-template-columns: 1fr; }
+  .erp-grid-3 { grid-template-columns: repeat(2, 1fr); }
+  .erp-kpi-row.cols-4 { grid-template-columns: repeat(2, 1fr); }
+  .erp-kpi-row.cols-5 { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 640px) {
+  .erp-page { gap: 6px; }
+  .pg-title { font-size: 18px; }
+  .erp-kpi-value { font-size: 16px; }
+  .erp-card { padding: 12px; }
+  .erp-grid-3 { grid-template-columns: 1fr; }
+}
