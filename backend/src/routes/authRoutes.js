@@ -1,11 +1,15 @@
 import { Router } from "express";
 import * as authController from "../controllers/authController.js";
+import { authLimiter, loginLimiter } from "../middleware/rateLimiter.js";
 
 const router = Router();
 
+// Apply a general rate limiter to all auth routes
+router.use(authLimiter);
+
 // Public routes
-router.post("/register",    authController.register);
-router.post("/login",       authController.login);
+router.post("/register", authController.register);
+router.post("/login", loginLimiter, authController.login);
 router.post("/verify-email", authController.verifyEmail);
 router.post("/resend-otp",  authController.resendOtp);
 
