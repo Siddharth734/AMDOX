@@ -202,7 +202,7 @@ export default function AnalyticalDashboardPage() {
         .kpi-value { font-size:15px; font-weight:700; color:#2a2f50; letter-spacing:-0.3px; margin-bottom:1px }
         .kpi-change { font-size:9.5px; font-weight:600; color:#2ea86e }
         .kpi-spark { height:20px; margin-top:2px }
-        .content-grid { display:grid; grid-template-columns:1fr 260px; gap:8px; flex:1; min-height:0 }
+        .content-grid { display:grid; grid-template-columns:1fr 260px; gap:8px; flex:1; min-height:0; margin-top:-6px }
         .left-col { display:flex; flex-direction:column; gap:8px; min-height:0 }
         .right-col { display:flex; flex-direction:column; gap:8px; min-height:0 }
         .card { background:rgba(255,255,255,0.88); border-radius:14px; padding:11px 12px; box-shadow:0 2px 12px rgba(100,120,200,0.08); display:flex; flex-direction:column }
