@@ -4,7 +4,7 @@ import { usePathname } from "next/navigation";
 import {
   LayoutDashboard, Users, DollarSign,
   Package, FolderKanban, Settings,
-  FileBarChart, TrendingUp, ShoppingBag, Cpu
+  FileBarChart, TrendingUp, ShoppingBag, Cpu, Bell
 } from "lucide-react";
 import { cn } from "@/src/lib/utils";
 import { useAuthStore } from "@/src/store/useAuthStore";

@@ -16,7 +16,7 @@ export default function ProjectsDashboard() {
         </div>
         <GlassCard className="p-12 text-center border-2 border-dashed border-white/[0.07]">
           <FolderKanban size={36} className="mx-auto mb-4" style={{ color:"rgba(244,114,182,0.3)" }} />
-          <p className="text-[14px] font-semibold text-[#9aa3bb] mb-1">Projects Module — Kalendra</p>
+          <p className="text-[14px] font-semibold text-[#9aa3bb] mb-1">Projects Module</p>
           <p className="text-[11px] text-[#5c667e] font-mono">Build ProjectTable, KanbanBoard, ProgressBar in src/modules/projects/components/</p>
         </GlassCard>
       </div>
