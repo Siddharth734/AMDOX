@@ -187,7 +187,7 @@ export default function AnalyticalDashboardPage() {
     <AppShell title="Dashboard">
       <style dangerouslySetInnerHTML={{ __html: `
         * { box-sizing:border-box; margin:0; padding:0; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif }
-        .anal-wrap { display:flex; flex-direction:column; gap:8px; min-width:0; height:100%; overflow:hidden; padding-right:4px }
+        .anal-wrap { display:flex; flex-direction:column; gap:8px; min-width:0; flex:1; min-height:0; overflow:hidden; padding-right:4px }
         .topbar { display:flex; align-items:center; justify-content:space-between; margin-bottom: 2px; }
         .pg-title { font-size:22px; font-weight:700; color:#2a2f50; letter-spacing:-0.3px }
         .tb-icons { display:flex; gap:6px }
