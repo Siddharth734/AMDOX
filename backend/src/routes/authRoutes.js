@@ -14,10 +14,10 @@ router.post("/verify-email", authController.verifyEmail);
 router.post("/resend-otp",  authController.resendOtp);
 
 // Token routes (use cookies)
-router.get("/me",            authController.getMe);
+router.get("/me", authController.getMe);
 router.get("/refresh-token", authController.refreshToken);
-router.get("/logout",        authController.logout);
-router.get("/logout-all",    authController.logoutAll);
+router.get("/logout", authController.logout);
+router.get("/logout-all", authController.logoutAll);
 
 // Password (placeholder)
 router.post("/forgot-password", authController.forgotPassword);

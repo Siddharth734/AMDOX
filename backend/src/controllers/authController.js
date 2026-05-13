@@ -1,7 +1,6 @@
 import User from "../models/User.js";
 import Session from "../models/Session.js";
 import Otp from "../models/Otp.js";
-import crypto from "crypto";
 import bcrypt from "bcrypt";
 import config from "../config/config.js";
 import { signAccessToken, signRefreshToken, verifyAccessToken } from "../utils/jwt.js";
