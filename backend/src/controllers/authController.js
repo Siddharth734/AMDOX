@@ -2,27 +2,31 @@ import User from "../models/User.js";
 import Session from "../models/Session.js";
 import Otp from "../models/Otp.js";
 import crypto from "crypto";
+import bcrypt from "bcrypt";
 import config from "../config/config.js";
 import { signAccessToken, signRefreshToken, verifyAccessToken } from "../utils/jwt.js";
 import { sendEmail } from "../services/emailService.js";
 import { generateOTP, getOTPHTML } from "../utils/otpUtils.js";
 import { UnauthorisedError, ConflictError, NotFoundError } from "../utils/errors.js";
+import { registerSchema, loginSchema } from "../utils/validationSchemas.js";
+
+const SALT_ROUNDS = 10;
 
 // ── Register ─────────────────────────────────────────────
 export async function register(req, res, next) {
   try {
-    const { username, email, password } = req.body;
-
-    if (!username || !email || !password) {
-      return res.status(400).json({ success: false, message: "Username, email and password are required" });
+    const { error, value } = registerSchema.validate(req.body);
+    if (error) {
+      return res.status(400).json({ success: false, message: error.details[0].message });
     }
+    const { username, email, password } = value;
 
     const existing = await User.findOne({ $or: [{ username }, { email }] });
     if (existing) {
       return res.status(409).json({ success: false, message: "Username or email already exists" });
     }
 
-    const hashedPass = crypto.createHash("sha256").update(password).digest("hex");
+    const hashedPass = await bcrypt.hash(password, SALT_ROUNDS);
 
     const user = await User.create({ username, email, password: hashedPass });
 
@@ -122,11 +126,11 @@ export async function resendOtp(req, res, next) {
 // ── Login ────────────────────────────────────────────────
 export async function login(req, res, next) {
   try {
-    const { email, password } = req.body;
-
-    if (!email || !password) {
-      return res.status(400).json({ success: false, message: "Email and password are required" });
+    const { error, value } = loginSchema.validate(req.body);
+    if (error) {
+        return res.status(400).json({ success: false, message: error.details[0].message });
     }
+    const { email, password } = value;
 
     const user = await User.findOne({ email });
     if (!user) {
@@ -141,8 +145,8 @@ export async function login(req, res, next) {
       return res.status(401).json({ success: false, message: "Account deactivated" });
     }
 
-    const hashedPass = crypto.createHash("sha256").update(password).digest("hex");
-    if (hashedPass !== user.password) {
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
       return res.status(400).json({ success: false, message: "Invalid credentials" });
     }
 
@@ -169,8 +173,8 @@ export async function login(req, res, next) {
     // Set refresh token as httpOnly cookie
     res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
-      secure: false,        // false for localhost, true in production
-      sameSite: "lax",      // lax for cross-port localhost
+      secure: config.NODE_ENV === "production",
+      sameSite: "lax",
       maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
     });
 
@@ -238,7 +242,7 @@ export async function refreshToken(req, res, next) {
 
     let decoded;
     try {
-      decoded = verifyAccessToken(token); // same secret
+      decoded = verifyRefreshToken(token);
     } catch {
       return res.status(401).json({ success: false, message: "Invalid refresh token" });
     }
@@ -270,7 +274,7 @@ export async function refreshToken(req, res, next) {
 
     res.cookie("refreshToken", newRefreshToken, {
       httpOnly: true,
-      secure: false,
+      secure: config.NODE_ENV === "production",
       sameSite: "lax",
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
@@ -318,7 +322,7 @@ export async function logoutAll(req, res, next) {
 
     let decoded;
     try {
-      decoded = verifyAccessToken(token);
+      decoded = verifyRefreshToken(token);
     } catch {
       return res.status(401).json({ success: false, message: "Invalid refresh token" });
     }
